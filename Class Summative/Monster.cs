@@ -45,6 +45,20 @@ namespace Class_Summative
                 mo.x -= speed;
             }
 
+            public bool collision(Monster mo, Bullets bl)
+        {           
+            Rectangle moRec = new Rectangle(mo.x, mo.y, mo.size, mo.size);
+            Rectangle blRec = new Rectangle(bl.x, bl.y, bl.size, bl.size);
+            if (blRec.IntersectsWith(moRec))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         }
     }
 }

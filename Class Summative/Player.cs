@@ -20,9 +20,9 @@ namespace Class_Summative
             size = _size;
             speed = _speed;
             images = _images;
-
+            imageDraw = images[0];
         }
-       
+
 
         public void move(Player pl, string direction)
         {
@@ -48,7 +48,7 @@ namespace Class_Summative
                 pl.x -= speed;
             }
         }
-        public bool collision(Player pl, Monster mo )
+        public bool collision(Player pl, Monster mo)
         {
             Rectangle plRec = new Rectangle(pl.x, pl.y, pl.size, pl.size);
             Rectangle moRec = new Rectangle(mo.x, mo.y, mo.size, mo.size);

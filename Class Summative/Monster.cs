@@ -14,14 +14,14 @@ namespace Class_Summative
         public Image[] monsterImages;
 
         public Monster(int _x, int _y, int _size, int _speed, Image[] _monsterImages)
-            {
-             x = _x;
+        {
+            x = _x;
             y = _y;
             size = _size;
             speed = _speed;
             monsterImages = _monsterImages;
-            }
-        public void move(Monster mo,string direction)
+        }
+        public void move(Monster mo, string direction)
         {
             if (direction == "up")
             {
@@ -44,9 +44,9 @@ namespace Class_Summative
                 mo.monsterDraw = mo.monsterImages[3];
                 mo.x -= speed;
             }
-
-            public bool collision(Monster mo, Bullets bl)
-        {           
+        }
+        public bool collision(Monster mo, Bullets bl)
+        {
             Rectangle moRec = new Rectangle(mo.x, mo.y, mo.size, mo.size);
             Rectangle blRec = new Rectangle(bl.x, bl.y, bl.size, bl.size);
             if (blRec.IntersectsWith(moRec))
@@ -59,6 +59,6 @@ namespace Class_Summative
             }
         }
 
-        }
     }
 }
+

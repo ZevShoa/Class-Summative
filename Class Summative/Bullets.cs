@@ -18,7 +18,26 @@ namespace Class_Summative
             speed = _speed;
             direction = _direction;
         }
+        public void move(Bullets bl)
+        {
+            if (bl.direction == 0)
+            {
+                bl.y -= speed;
+            }
+            if (bl.direction == 1)
+            {
+                bl.x += speed;
+            }
+            if (bl.direction == 2)
+            {
+                bl.y += speed;
+            }
+            if (bl.direction == 3)
+            {
+                bl.x -= speed;
+            }
 
+        }
 
     }
 }

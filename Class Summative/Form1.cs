@@ -15,6 +15,8 @@ namespace Class_Summative
         public Form1()
         {
             InitializeComponent();
+            MainScreen ms = new MainScreen();
+            this.Controls.Add(ms);
         }
     }
 }

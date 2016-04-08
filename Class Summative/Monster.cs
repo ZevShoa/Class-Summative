@@ -9,41 +9,46 @@ namespace Class_Summative
 {
     class Monster
     {
-        public int x, y, size, speed;
+        public int x, y, size, speed, direction;
         public Image monsterDraw;
         public Image[] monsterImages;
 
-        public Monster(int _x, int _y, int _size, int _speed, Image[] _monsterImages)
+        public Monster(int _x, int _y, int _size, int _speed, int _direction, Image[] _monsterImages)
         {
             x = _x;
             y = _y;
             size = _size;
             speed = _speed;
+            direction = _direction;
+
             monsterImages = _monsterImages;
         }
-        public void move(Monster mo, string direction)
+        public void move(Monster mo, int direction)
         {
-            if (direction == "up")
+            if (direction == 0)
             {
-                mo.monsterDraw = mo.monsterImages[0];
+                mo.monsterDraw = mo.monsterImages[direction];
                 mo.y -= speed;
 
             }
-            else if (direction == "down")
+            if (direction == 1)
             {
-                mo.monsterDraw = mo.monsterImages[1];
-                mo.y += speed;
-            }
-            else if (direction == "right")
-            {
-                mo.monsterDraw = mo.monsterImages[2];
+                mo.monsterDraw = mo.monsterImages[direction];
                 mo.x += speed;
             }
-            else if (direction == "left")
+            if (direction == 2)
             {
-                mo.monsterDraw = mo.monsterImages[3];
+                mo.monsterDraw = mo.monsterImages[direction];
+                mo.y += speed;
+            }
+            if (direction == 3)
+            {
+                mo.monsterDraw = mo.monsterImages[direction];
                 mo.x -= speed;
             }
+
+
+
         }
         public bool collision(Monster mo, Bullets bl)
         {

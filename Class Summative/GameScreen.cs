@@ -12,9 +12,12 @@ namespace Class_Summative
 {
     public partial class GameScreen : UserControl
     {
+        Random randNum = new Random();
         int bulletSpeed = 10;
         int bulletSize = 5;
         int bulletDirection;
+        int monsterDirection;
+        int counter = 50;
         SolidBrush bulletBrush = new SolidBrush(Color.LightGoldenrodYellow);
         Player pl = new Player(100, 100, 50, 5, new Image[]
         {
@@ -24,49 +27,53 @@ namespace Class_Summative
             Properties.Resources.dancingPanda,
         }
     );
-        Monster mo = new Monster(300, 300, 20, 6, new Image[]
-            {
+        Monster mo = new Monster(300, 300, 100, 6, 2, new Image[]
+{
                 Properties.Resources.dancingObama,
                 Properties.Resources.dancingObama,
                 Properties.Resources.dancingObama,
                 Properties.Resources.dancingObama,
-            }
-            );
+}
+);
+
         bool aKeyDown, wKeyDown, dKeyDown, sKeyDown, spaceKeyDown;
         List<Monster> monsters = new List<Monster>();
         List<Bullets> bullets = new List<Bullets>();
 
+        Bullets bl = new Bullets(100, 100, 5, 20, 0);
         public GameScreen()
         {
             InitializeComponent();
-            
+
         }
 
-      
+
 
         private void GameScreen_Load(object sender, EventArgs e)
         {
             gameTimer.Enabled = true;
             pl.x = 100;
             pl.y = 100;
-            
             monsters.Add(mo);
-            Bullets bl = new Bullets(100, 100, 5, 20, 0);
+            mo.direction = monsterDirection;
+
            
+
 
             this.Focus();
         }
-       public void bulletShoot()
+        public void bulletShoot()
         {
+
             if (spaceKeyDown == true)
             {
                 Bullets bl = new Bullets(pl.x, pl.y, bulletSize, bulletSpeed, bulletDirection);
-                bullets.Add(bl);      
+                bullets.Add(bl);
             }
             foreach (Bullets bl in bullets)
             {
                 bl.move(bl, bulletDirection);
-                
+
             }
             foreach (Bullets bl in bullets)
             {
@@ -77,35 +84,123 @@ namespace Class_Summative
                 }
             }
         }
+
+
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-           
+            #region Player Wall Collision
+            if (pl.x <= 0)
+            {
+                pl.x += pl.speed;
+            }
+            if (pl.x + pl.size >= this.Width)
+            {
+                pl.x -= pl.speed;
+            }
+            if (pl.y <= 0)
+            {
+                pl.y += pl.speed;
+            }
+            if (pl.y + pl.size >= this.Height)
+            {
+                pl.y -= pl.speed;
+            }
+            #endregion
+            #region Monster Wall Collision
+            foreach (Monster mo in monsters)
+            {
+                if (mo.x <= 0)
+                {
+                    mo.x += mo.speed;
+                }
+                if (mo.x + mo.size >= this.Width)
+                {
+                    mo.x -= mo.speed;
+                }
+                if (mo.y <= 0)
+                {
+                    mo.y += mo.speed;
+                }
+                if (mo.y + mo.size >= this.Height)
+                {
+                    mo.y -= mo.speed;
+                }
+            }
+            #endregion
+            foreach (Monster mo in monsters)
+            {
+                if(pl.collision(pl, mo) == true)
+                {
+                   // gameTimer.Enabled = false;
+                }
+            }
+            foreach (Monster mo in monsters  )
+            {
+                
+                    if (mo.collision(mo, bl) == true)
+                    {
+                        monsters.Remove(mo);
+                    }
+                
+            }
+            
+               counter--;
+            if (counter == 0)
+            {
+                Monster mo = new Monster(300, 300, 100, 6, monsterDirection, new Image[]
+{
+                Properties.Resources.dancingObama,
+                Properties.Resources.dancingObama,
+                Properties.Resources.dancingObama,
+                Properties.Resources.dancingObama,
+}
+);
+                monsters.Add(mo);
+                counter = 50;
+            }
             if (aKeyDown == true)
             {
                 pl.move(pl, "left");
                 bulletDirection = 0;
-                
-
+                monsterDirection = 1;
+                foreach (Monster mo in monsters)
+                {
+                    mo.move(mo, monsterDirection);
+                }
             }
             else if (wKeyDown == true)
             {
                 pl.move(pl, "up");
                 bulletDirection = 1;
-               
+                monsterDirection = 3;
+                foreach (Monster mo in monsters)
+                {
+                    mo.move(mo, monsterDirection);
+                }
             }
             else if (dKeyDown == true)
             {
                 pl.move(pl, "right");
                 bulletDirection = 2;
-                
+                monsterDirection = 0;
+                foreach (Monster mo in monsters)
+                {
+
+                    mo.move(mo, monsterDirection);
+                }
             }
             else if (sKeyDown == true)
             {
                 pl.move(pl, "down");
                 bulletDirection = 3;
-               
+                monsterDirection = 2;
+                foreach (Monster mo in monsters)
+                {
+                    mo.move(mo, monsterDirection);
+                }
             }
-            if(spaceKeyDown == true)
+
+            if (spaceKeyDown == true)
             {
                 bulletShoot();
             }
@@ -115,7 +210,7 @@ namespace Class_Summative
             }
             Refresh();
         }
-        
+
 
         private void GameScreen_KeyUp(object sender, KeyEventArgs e)
         {
@@ -168,8 +263,12 @@ namespace Class_Summative
         }
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
+
             e.Graphics.DrawImage(pl.imageDraw, pl.x, pl.y, pl.size, pl.size);
-            e.Graphics.DrawImage(mo.monsterDraw, mo.x, mo.y, mo.size, mo.size);
+            foreach (Monster mo in monsters)
+            {
+                e.Graphics.DrawImage(mo.monsterImages[monsterDirection], mo.x, mo.y, mo.size, mo.size);
+            }
             foreach (Bullets bl in bullets)
             {
                 e.Graphics.FillEllipse(bulletBrush, bl.x, bl.y, bl.size, bl.size);

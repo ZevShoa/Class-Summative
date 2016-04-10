@@ -16,8 +16,7 @@ namespace Class_Summative
         int bulletSpeed = 10;
         int bulletSize = 5;
         int bulletDirection;
-        int monsterDirection;
-        int counter = 50;
+        int monsterDirection;       
         SolidBrush bulletBrush = new SolidBrush(Color.LightGoldenrodYellow);
         Player pl = new Player(100, 100, 50, 5, new Image[]
         {
@@ -88,6 +87,28 @@ namespace Class_Summative
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            
+            if (monsters.Count == 0)
+            {
+                Monster mo = new Monster(randNum.Next(100,800), randNum.Next(100, 800), 100, 6, monsterDirection, new Image[]
+{
+                Properties.Resources.dancingObama,
+                Properties.Resources.dancingObama,
+                Properties.Resources.dancingObama,
+                Properties.Resources.dancingObama,
+}
+);
+                monsters.Add(mo);
+                foreach (Bullets bl in bullets)
+                {
+                    if (mo.collision(mo, bl) == true)
+                    {
+                        monsters.Remove(mo);
+                        bullets.Remove(bl);
+                    }
+
+                }
+            }
             #region Player Wall Collision
             if (pl.x <= 0)
             {
@@ -131,33 +152,24 @@ namespace Class_Summative
             {
                 if(pl.collision(pl, mo) == true)
                 {
-                   // gameTimer.Enabled = false;
+                    Form f = this.FindForm();
+                    f.Controls.Remove(this);
+
+                    endScreen es = new endScreen();
+                    f.Controls.Add(es);
+                    break;
                 }
             }
-            foreach (Monster mo in monsters  )
+            foreach (Bullets bl in bullets )
             {
-                
-                    if (mo.collision(mo, bl) == true)
+                if (mo.collision(mo, bl) == true)
                     {
                         monsters.Remove(mo);
                     }
-                
+               
             }
             
-               counter--;
-            if (counter == 0)
-            {
-                Monster mo = new Monster(300, 300, 100, 6, monsterDirection, new Image[]
-{
-                Properties.Resources.dancingObama,
-                Properties.Resources.dancingObama,
-                Properties.Resources.dancingObama,
-                Properties.Resources.dancingObama,
-}
-);
-                monsters.Add(mo);
-                counter = 50;
-            }
+           
             if (aKeyDown == true)
             {
                 pl.move(pl, "left");

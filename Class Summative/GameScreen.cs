@@ -152,19 +152,23 @@ namespace Class_Summative
             {
                 if(pl.collision(pl, mo) == true)
                 {
+                    gameTimer.Enabled = false;
                     Form f = this.FindForm();
-                    f.Controls.Remove(this);
-
                     endScreen es = new endScreen();
+                    f.Controls.Remove(this);
                     f.Controls.Add(es);
-                    break;
+
+
+
                 }
             }
             foreach (Bullets bl in bullets )
             {
                 if (mo.collision(mo, bl) == true)
                     {
+                        
                         monsters.Remove(mo);
+                    
                     }
                
             }

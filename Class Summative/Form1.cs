@@ -1,4 +1,7 @@
-﻿using System;
+﻿///Zev Shoag
+/// A basic game engine 
+/// created on April 13 2016
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +18,7 @@ namespace Class_Summative
         public Form1()
         {
             InitializeComponent();
+            // transfers to a main screen
             MainScreen ms = new MainScreen();
             this.Controls.Add(ms);
         }

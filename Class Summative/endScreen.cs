@@ -19,6 +19,7 @@ namespace Class_Summative
 
         private void continueButton_Click(object sender, EventArgs e)
         {
+            //A button that transfers them to the Main screen to either start again or exit
             Form f = this.FindForm();
             f.Controls.Remove(this);
 

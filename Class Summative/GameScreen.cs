@@ -12,12 +12,16 @@ namespace Class_Summative
 {
     public partial class GameScreen : UserControl
     {
+
         Random randNum = new Random();
         int bulletSpeed = 10;
         int bulletSize = 5;
         int bulletDirection;
-        int monsterDirection;       
+        int monsterDirection;
+        int monsterCounter = 50;
+        //Brush for the bullets
         SolidBrush bulletBrush = new SolidBrush(Color.LightGoldenrodYellow);
+        // making the player
         Player pl = new Player(100, 100, 50, 5, new Image[]
         {
             Properties.Resources.dancingPanda,
@@ -26,6 +30,7 @@ namespace Class_Summative
             Properties.Resources.dancingPanda,
         }
     );
+        //making the first monster
         Monster mo = new Monster(300, 300, 100, 6, 2, new Image[]
 {
                 Properties.Resources.dancingObama,
@@ -34,8 +39,8 @@ namespace Class_Summative
                 Properties.Resources.dancingObama,
 }
 );
-
         bool aKeyDown, wKeyDown, dKeyDown, sKeyDown, spaceKeyDown;
+        //making lists for both the monster and the bullets
         List<Monster> monsters = new List<Monster>();
         List<Bullets> bullets = new List<Bullets>();
 
@@ -45,25 +50,19 @@ namespace Class_Summative
             InitializeComponent();
 
         }
-
-
-
         private void GameScreen_Load(object sender, EventArgs e)
         {
+            //Starting the game timer and positioning my player and monster
             gameTimer.Enabled = true;
             pl.x = 100;
             pl.y = 100;
             monsters.Add(mo);
             mo.direction = monsterDirection;
-
-           
-
-
             this.Focus();
         }
         public void bulletShoot()
         {
-
+            //if the space key is down then add a bullet
             if (spaceKeyDown == true)
             {
                 Bullets bl = new Bullets(pl.x, pl.y, bulletSize, bulletSpeed, bulletDirection);
@@ -71,11 +70,13 @@ namespace Class_Summative
             }
             foreach (Bullets bl in bullets)
             {
-                bl.move(bl, bulletDirection);
+                // makes the bullets move
+                bl.move(bl);
 
             }
             foreach (Bullets bl in bullets)
             {
+                // if the bullets go off screen then remove it
                 if (bl.x < 0 || bl.x > this.Width || bl.y < 0 || bl.y > this.Height)
                 {
                     bullets.Remove(bl);
@@ -83,14 +84,14 @@ namespace Class_Summative
                 }
             }
         }
-
-
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            
-            if (monsters.Count == 0)
+            //take one away from the counter 
+            monsterCounter--;
+            //if it is at zero then add a monster and rest the counter
+            if(monsterCounter == 0)
             {
-                Monster mo = new Monster(randNum.Next(100,800), randNum.Next(100, 800), 100, 6, monsterDirection, new Image[]
+                Monster mo = new Monster(randNum.Next(100, 800), randNum.Next(100, 800), 100, 6, monsterDirection, new Image[]
 {
                 Properties.Resources.dancingObama,
                 Properties.Resources.dancingObama,
@@ -99,6 +100,22 @@ namespace Class_Summative
 }
 );
                 monsters.Add(mo);
+                monsterCounter = 50;
+            }
+            //if there are no monsters on the screen then add a monster
+            if (monsters.Count == 0)
+            {
+                Monster mo = new Monster(randNum.Next(100, 800), randNum.Next(100, 800), 100, 6, monsterDirection, new Image[]
+{
+                Properties.Resources.dancingObama,
+                Properties.Resources.dancingObama,
+                Properties.Resources.dancingObama,
+                Properties.Resources.dancingObama,
+}
+);
+                monsters.Add(mo);
+                // broken monster collision with bullets 
+                //If the bullets rectangle hits the monster rectangle remove both of them
                 foreach (Bullets bl in bullets)
                 {
                     if (mo.collision(mo, bl) == true)
@@ -109,6 +126,7 @@ namespace Class_Summative
 
                 }
             }
+            //making sure the player and the monster don't go off the screen
             #region Player Wall Collision
             if (pl.x <= 0)
             {
@@ -148,32 +166,27 @@ namespace Class_Summative
                 }
             }
             #endregion
+            //the logic for monster and player collisions
             foreach (Monster mo in monsters)
             {
-                if(pl.collision(pl, mo) == true)
+                if (pl.collision(pl, mo) == true)
                 {
                     gameTimer.Enabled = false;
                     Form f = this.FindForm();
                     endScreen es = new endScreen();
                     f.Controls.Remove(this);
                     f.Controls.Add(es);
-
-
-
                 }
             }
-            foreach (Bullets bl in bullets )
+            //logic for monster bullet collision
+            foreach (Bullets bl in bullets)
             {
                 if (mo.collision(mo, bl) == true)
-                    {
-                        
-                        monsters.Remove(mo);
-                    
-                    }
-               
+                {
+                    monsters.Remove(mo);
+                }
             }
-            
-           
+// player movement
             if (aKeyDown == true)
             {
                 pl.move(pl, "left");
@@ -226,8 +239,7 @@ namespace Class_Summative
             }
             Refresh();
         }
-
-
+         //keyup and down methods 
         private void GameScreen_KeyUp(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -251,7 +263,6 @@ namespace Class_Summative
                     break;
             }
         }
-
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             switch (e.KeyCode)
@@ -277,6 +288,7 @@ namespace Class_Summative
 
             }
         }
+        // making the bullets, monsters and player
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
 

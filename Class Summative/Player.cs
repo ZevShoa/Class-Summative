@@ -9,6 +9,7 @@ namespace Class_Summative
 {
     class Player
     {
+        //all the elements of my player class
         public int x, y, size, speed;
         public Image imageDraw;
         public Image[] images;
@@ -23,7 +24,7 @@ namespace Class_Summative
             imageDraw = images[0];
         }
 
-
+        //the move method for my player
         public void move(Player pl, string direction)
         {
             if (direction == "up")
@@ -48,6 +49,7 @@ namespace Class_Summative
                 pl.x -= speed;
             }
         }
+        //my collision for my player and monster
         public bool collision(Player pl, Monster mo)
         {
             Rectangle plRec = new Rectangle(pl.x, pl.y, pl.size, pl.size);

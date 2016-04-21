@@ -30,7 +30,8 @@ namespace Class_Summative
             Properties.Resources.dancingPanda,
         }
     );
-        //making the first monster
+        
+        //making the first monster 
         Monster mo = new Monster(300, 300, 100, 6, 2, new Image[]
 {
                 Properties.Resources.dancingObama,
